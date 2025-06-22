@@ -73,9 +73,6 @@ public class PlayerListener implements Listener {
         // 向玩家显示Title
         // 注意：在您使用的Bukkit API版本中，sendTitle只接受两个参数
         player.sendTitle(mainTitle, subTitle);
-
-        // 记录调试信息
-        plugin.getLogger().info("向玩家 " + player.getName() + " 显示标题: " + mainTitle + " - " + subTitle);
     }
 
     // 检测玩家是否掉入虚空，如果是则传送回出生点
@@ -117,8 +114,7 @@ public class PlayerListener implements Listener {
                 // 检查方块类型是否为任何类型的门
                 if (material.name().contains("DOOR") ||
                         material.name().contains("GATE") ||
-                        material.name().contains("TRAPDOOR") ||
-                        material == Material.FENCE_GATE) {
+                        material.name().contains("TRAPDOOR")) {
                     event.setCancelled(true);
                 }
             }

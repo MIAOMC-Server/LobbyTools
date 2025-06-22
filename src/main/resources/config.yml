@@ -26,7 +26,7 @@ settings:
   # 启用或禁用命令阻止功能
   prevent-commands: true
   # 启用或禁用加入服务器时显示title
-  show-join-title: true
+  show-join-title: false
 
 # 出生点设置
 # 注意：这部分将由 /lobbytools setspawn 命令自动更新
