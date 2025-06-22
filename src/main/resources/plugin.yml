@@ -1,0 +1,17 @@
+name: LobbyTools
+version: '${project.version}'
+main: com.miaomc.lobbyTools.LobbyTools
+prefix: LOBBYTOOLS
+load: STARTUP
+authors: [ KumaKorin ]
+description: LobbyTools is a plugin that provides various tools for managing and enhancing the lobby experience in Minecraft servers.
+website: https://korin.im
+
+commands:
+  lobbytools:
+    description: 主命令，用于控制插件功能
+    usage: /lobbytools <子命令>
+    aliases: [ lt ]
+  mlt:
+    description: LobbyTools 插件的快捷命令
+    usage: /mlt <子命令>

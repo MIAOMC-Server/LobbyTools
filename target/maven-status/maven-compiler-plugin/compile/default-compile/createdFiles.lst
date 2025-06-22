@@ -1,0 +1,6 @@
+com\miaomc\lobbyTools\listeners\CommandListener.class
+com\miaomc\lobbyTools\commands\LobbyToolsCommand.class
+com\miaomc\lobbyTools\listeners\DamageListener.class
+com\miaomc\lobbyTools\listeners\WorldListener.class
+com\miaomc\lobbyTools\listeners\PlayerListener.class
+com\miaomc\lobbyTools\LobbyTools.class
