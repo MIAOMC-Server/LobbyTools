@@ -57,9 +57,9 @@ public class WorldListener implements Listener {
         if (plugin.isFeatureEnabled("prevent-harvest")) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 Material blockType = clickedBlock.getType();
-                if (blockType == Material.CROPS ||
-                        blockType == Material.POTATO ||
-                        blockType == Material.CARROT) {
+                if (blockType == Material.WHEAT ||
+                        blockType == Material.POTATOES ||
+                        blockType == Material.CARROTS) {
                     event.setCancelled(true);
                     return; // 已经取消了事件，无需继续处理
                 }
@@ -80,15 +80,16 @@ public class WorldListener implements Listener {
                 }
 
                 // 门类
-                if (blockType == Material.WOODEN_DOOR ||
-                        blockType == Material.IRON_DOOR_BLOCK ||
-                        blockType == Material.FENCE_GATE ||
+                if (blockType == Material.OAK_DOOR ||
+                        blockType == Material.IRON_DOOR ||
+                        blockType == Material.OAK_FENCE_GATE ||
                         blockType == Material.ACACIA_DOOR ||
                         blockType == Material.BIRCH_DOOR ||
                         blockType == Material.DARK_OAK_DOOR ||
                         blockType == Material.JUNGLE_DOOR ||
                         blockType == Material.SPRUCE_DOOR ||
-                        blockType == Material.TRAP_DOOR) {
+                        blockType == Material.OAK_TRAPDOOR ||
+                        blockType == Material.IRON_TRAPDOOR) {
                     event.setCancelled(true);
                     return;
                 }
@@ -96,9 +97,9 @@ public class WorldListener implements Listener {
                 // 红石类交互方块
                 if (blockType == Material.LEVER ||
                         blockType == Material.STONE_BUTTON ||
-                        blockType == Material.WOOD_BUTTON ||
-                        blockType == Material.REDSTONE_COMPARATOR ||
-                        blockType == Material.DIODE ||
+                        blockType == Material.OAK_BUTTON ||
+                        blockType == Material.COMPARATOR ||
+                        blockType == Material.REPEATER ||
                         blockType == Material.DAYLIGHT_DETECTOR) {
                     event.setCancelled(true);
                     return;
@@ -107,11 +108,10 @@ public class WorldListener implements Listener {
                 // 其他可交互的方块
                 if (blockType == Material.BEACON ||
                         blockType == Material.FURNACE ||
-                        blockType == Material.BURNING_FURNACE ||
                         blockType == Material.BREWING_STAND ||
-                        blockType == Material.ENCHANTMENT_TABLE ||
+                        blockType == Material.ENCHANTING_TABLE ||
                         blockType == Material.ANVIL ||
-                        blockType == Material.WORKBENCH ||
+                        blockType == Material.CRAFTING_TABLE ||
                         blockType == Material.HOPPER ||
                         blockType == Material.DROPPER ||
                         blockType == Material.DISPENSER) {
