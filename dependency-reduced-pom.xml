@@ -4,7 +4,7 @@
   <groupId>com.miaomc</groupId>
   <artifactId>lobbytools</artifactId>
   <name>lobbytools</name>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -31,6 +31,15 @@
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <createDependencyReducedPom>true</createDependencyReducedPom>
+              <relocations>
+                <relocation>
+                  <pattern>net.kyori</pattern>
+                  <shadedPattern>com.miaomc.lobbytools.libs.kyori</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
           </execution>
         </executions>
       </plugin>
