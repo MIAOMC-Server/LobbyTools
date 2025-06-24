@@ -1,7 +1,9 @@
 package com.miaomc.lobbyTools.listeners;
 
 import com.miaomc.lobbyTools.LobbyTools;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,6 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 
@@ -46,7 +49,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    // 从配置中随机选择并显示标题给玩家
+    // 从配置中随机选择并显示标题给玩家，使用MiniMessage格式
     private void showRandomTitleToPlayer(Player player) {
         ConfigurationSection titleSection = plugin.getConfig().getConfigurationSection("title");
         if (titleSection == null) return;
@@ -57,22 +60,39 @@ public class PlayerListener implements Listener {
 
         if (mainTitles.isEmpty()) {
             // 如果列表为空，使用默认值
-            mainTitles.add("&6欢迎来到服务器!");
+            mainTitles.add("<gradient:#7FFFD4:#40E0D0><bold>MIAOMC Network</bold></gradient>");
         }
         if (subTitles.isEmpty()) {
             // 如果列表为空，使用默认值
-            subTitles.add("&e祝您游戏愉快!");
+            subTitles.add("<yellow>祝您游戏愉快!</yellow>");
         }
 
         // 随机选择一条主标题和副标题
-        String mainTitle = ChatColor.translateAlternateColorCodes('&',
-                mainTitles.get(random.nextInt(mainTitles.size())));
-        String subTitle = ChatColor.translateAlternateColorCodes('&',
-                subTitles.get(random.nextInt(subTitles.size())));
+        String mainTitleText = mainTitles.get(random.nextInt(mainTitles.size()));
+        String subTitleText = subTitles.get(random.nextInt(subTitles.size()));
 
-        // 向玩家显示Title
-        // 注意：在您使用的Bukkit API版本中，sendTitle只接受两个参数
-        player.sendTitle(mainTitle, subTitle);
+        // 使用MiniMessage解析文本
+        Component mainTitle = plugin.parseMiniMessage(mainTitleText);
+        Component subTitle = plugin.parseMiniMessage(subTitleText);
+
+        // 获取标题显示时间配置
+        int fadeIn = titleSection.getInt("fade-in", 10);
+        int stay = titleSection.getInt("stay", 70);
+        int fadeOut = titleSection.getInt("fade-out", 20);
+
+        // 创建Title对象
+        Title title = Title.title(
+                mainTitle,
+                subTitle,
+                Times.times(
+                        Duration.ofMillis(fadeIn * 50), // tick转换为毫秒
+                        Duration.ofMillis(stay * 50),
+                        Duration.ofMillis(fadeOut * 50)
+                )
+        );
+
+        // 使用Adventure API显示Title
+        plugin.adventure().player(player).showTitle(title);
     }
 
     // 检测玩家是否掉入虚空，如果是则传送回出生点
@@ -111,11 +131,22 @@ public class PlayerListener implements Listener {
             Block block = event.getClickedBlock();
             if (block != null) {
                 Material material = block.getType();
-                // 检查方块类型是否为任何类型的门
-                if (material.name().contains("DOOR") ||
-                        material.name().contains("GATE") ||
-                        material.name().contains("TRAPDOOR")) {
+                String materialName = material.name().toUpperCase();
+
+                // 检查方块类型是否为任何类型的门、栅栏门或活板门
+                // 活板门可能以 TRAPDOOR 或 TRAP_DOOR 的形式出现，需要两种形式都检查
+                if (materialName.contains("DOOR") ||
+                        materialName.contains("GATE") ||
+                        materialName.contains("TRAPDOOR") ||
+                        materialName.contains("TRAP_DOOR")) {
+
                     event.setCancelled(true);
+
+                    // 调试信息，帮助跟踪问题
+                    if (plugin.isDebugMode()) {
+                        plugin.getLogger().info("阻止玩家 " + event.getPlayer().getName() +
+                                " 与方块交互: " + materialName);
+                    }
                 }
             }
         }

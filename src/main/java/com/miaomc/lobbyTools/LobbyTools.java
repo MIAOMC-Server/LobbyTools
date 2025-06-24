@@ -5,6 +5,9 @@ import com.miaomc.lobbyTools.listeners.CommandListener;
 import com.miaomc.lobbyTools.listeners.DamageListener;
 import com.miaomc.lobbyTools.listeners.PlayerListener;
 import com.miaomc.lobbyTools.listeners.WorldListener;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,10 +20,18 @@ public final class LobbyTools extends JavaPlugin {
     private Location spawnLocation;
     private boolean spawnLoaded = false;
 
+    // MiniMessage 相关字段
+    private BukkitAudiences adventure;
+    private MiniMessage miniMessage;
+
     @Override
     public void onEnable() {
         // 保存实例以便在其他类中访问
         instance = this;
+
+        // 初始化 Adventure API
+        this.adventure = BukkitAudiences.create(this);
+        this.miniMessage = MiniMessage.miniMessage();
 
         // 加载配置
         saveDefaultConfig();
@@ -47,7 +58,29 @@ public final class LobbyTools extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
         getLogger().info("LobbyTools 插件已禁用!");
+    }
+
+    // 获取 Adventure API 实例
+    public BukkitAudiences adventure() {
+        if (this.adventure == null) {
+            throw new IllegalStateException("Adventure API 未初始化或已关闭!");
+        }
+        return this.adventure;
+    }
+
+    // 获取 MiniMessage 实例
+    public MiniMessage miniMessage() {
+        return this.miniMessage;
+    }
+
+    // 使用 MiniMessage 解析文本
+    public Component parseMiniMessage(String text) {
+        return miniMessage.deserialize(text);
     }
 
     public static LobbyTools getInstance() {
@@ -136,5 +169,10 @@ public final class LobbyTools extends JavaPlugin {
     // 检查功能是否启用
     public boolean isFeatureEnabled(String feature) {
         return getConfig().getBoolean("settings." + feature, true);
+    }
+
+    // 检查是否开启调试模式
+    public boolean isDebugMode() {
+        return getConfig().getBoolean("settings.debug-mode", false);
     }
 }
