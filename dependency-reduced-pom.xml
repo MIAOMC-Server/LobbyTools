@@ -4,7 +4,7 @@
   <groupId>com.miaomc</groupId>
   <artifactId>lobbytools</artifactId>
   <name>lobbytools</name>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>

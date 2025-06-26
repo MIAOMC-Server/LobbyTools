@@ -1,6 +1,7 @@
 name: LobbyTools
 version: '${project.version}'
 main: com.miaomc.lobbyTools.LobbyTools
+api-version: '1.16'
 prefix: LOBBYTOOLS
 load: POSTWORLD
 authors: [ KumaKorin ]

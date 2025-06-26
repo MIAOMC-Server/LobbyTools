@@ -4,15 +4,11 @@ import com.miaomc.lobbyTools.LobbyTools;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.Title.Times;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -120,35 +116,5 @@ public class PlayerListener implements Listener {
 
         Player player = event.getPlayer();
         event.setCancelled(true);
-    }
-
-    // 禁止玩家与门交互
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!plugin.isFeatureEnabled("prevent-door-interaction")) return;
-
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Block block = event.getClickedBlock();
-            if (block != null) {
-                Material material = block.getType();
-                String materialName = material.name().toUpperCase();
-
-                // 检查方块类型是否为任何类型的门、栅栏门或活板门
-                // 活板门可能以 TRAPDOOR 或 TRAP_DOOR 的形式出现，需要两种形式都检查
-                if (materialName.contains("DOOR") ||
-                        materialName.contains("GATE") ||
-                        materialName.contains("TRAPDOOR") ||
-                        materialName.contains("TRAP_DOOR")) {
-
-                    event.setCancelled(true);
-
-                    // 调试信息，帮助跟踪问题
-                    if (plugin.isDebugMode()) {
-                        plugin.getLogger().info("阻止玩家 " + event.getPlayer().getName() +
-                                " 与方块交互: " + materialName);
-                    }
-                }
-            }
-        }
     }
 }

@@ -53,6 +53,42 @@ public class WorldListener implements Listener {
             return;
         }
 
+        // 阻止踩踏农田
+        if (plugin.isFeatureEnabled("prevent-farmland-trampling")) {
+            if (event.getAction() == Action.PHYSICAL) {
+                Material blockType = clickedBlock.getType();
+                if (blockType == Material.FARMLAND) {
+                    event.setCancelled(true);
+                    if (plugin.isDebugMode()) {
+                        plugin.getLogger().info("阻止玩家 " + player.getName() + " 踩踏农田");
+                    }
+                    return;
+                }
+            }
+        }
+
+        // 阻止踩压力板
+        if (plugin.isFeatureEnabled("prevent-pressure-plate")) {
+            if (event.getAction() == Action.PHYSICAL) {
+                Material blockType = clickedBlock.getType();
+                if (blockType == Material.STONE_PRESSURE_PLATE ||
+                        blockType == Material.OAK_PRESSURE_PLATE ||
+                        blockType == Material.SPRUCE_PRESSURE_PLATE ||
+                        blockType == Material.BIRCH_PRESSURE_PLATE ||
+                        blockType == Material.JUNGLE_PRESSURE_PLATE ||
+                        blockType == Material.ACACIA_PRESSURE_PLATE ||
+                        blockType == Material.DARK_OAK_PRESSURE_PLATE ||
+                        blockType == Material.LIGHT_WEIGHTED_PRESSURE_PLATE ||
+                        blockType == Material.HEAVY_WEIGHTED_PRESSURE_PLATE) {
+                    event.setCancelled(true);
+                    if (plugin.isDebugMode()) {
+                        plugin.getLogger().info("阻止玩家 " + player.getName() + " 踩踏压力板: " + blockType.name());
+                    }
+                    return;
+                }
+            }
+        }
+
         // 处理收获作物的互动
         if (plugin.isFeatureEnabled("prevent-harvest")) {
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {

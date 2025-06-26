@@ -1,6 +1,7 @@
 name: LobbyTools
-version: '0.1.2'
+version: '0.1.3'
 main: com.miaomc.lobbyTools.LobbyTools
+api-version: '1.16'
 prefix: LOBBYTOOLS
 load: POSTWORLD
 authors: [ KumaKorin ]
