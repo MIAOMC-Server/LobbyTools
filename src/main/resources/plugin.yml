@@ -2,7 +2,7 @@ name: LobbyTools
 version: '${project.version}'
 main: com.miaomc.lobbyTools.LobbyTools
 prefix: LOBBYTOOLS
-load: STARTUP
+load: POSTWORLD
 authors: [ KumaKorin ]
 description: LobbyTools is a plugin that provides various tools for managing and enhancing the lobby experience in Minecraft servers.
 website: https://korin.im
