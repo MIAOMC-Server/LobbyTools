@@ -25,6 +25,8 @@ settings:
   prevent-harvest: true
   # 启用或禁用命令阻止功能
   prevent-commands: true
+  # 启用或禁用阻止TAB补全非白名单命令功能
+  prevent-tab-completion: true
   # 启用或禁用加入服务器时显示title
   show-join-title: false
 

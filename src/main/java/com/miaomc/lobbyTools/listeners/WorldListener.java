@@ -71,15 +71,8 @@ public class WorldListener implements Listener {
         if (plugin.isFeatureEnabled("prevent-pressure-plate")) {
             if (event.getAction() == Action.PHYSICAL) {
                 Material blockType = clickedBlock.getType();
-                if (blockType == Material.STONE_PRESSURE_PLATE ||
-                        blockType == Material.OAK_PRESSURE_PLATE ||
-                        blockType == Material.SPRUCE_PRESSURE_PLATE ||
-                        blockType == Material.BIRCH_PRESSURE_PLATE ||
-                        blockType == Material.JUNGLE_PRESSURE_PLATE ||
-                        blockType == Material.ACACIA_PRESSURE_PLATE ||
-                        blockType == Material.DARK_OAK_PRESSURE_PLATE ||
-                        blockType == Material.LIGHT_WEIGHTED_PRESSURE_PLATE ||
-                        blockType == Material.HEAVY_WEIGHTED_PRESSURE_PLATE) {
+                String materialName = blockType.name();
+                if (materialName.contains("PRESSURE_PLATE")) {
                     event.setCancelled(true);
                     if (plugin.isDebugMode()) {
                         plugin.getLogger().info("阻止玩家 " + player.getName() + " 踩踏压力板: " + blockType.name());
@@ -115,29 +108,28 @@ public class WorldListener implements Listener {
                     return;
                 }
 
-                // 门类
-                if (blockType == Material.OAK_DOOR ||
-                        blockType == Material.IRON_DOOR ||
-                        blockType == Material.OAK_FENCE_GATE ||
-                        blockType == Material.ACACIA_DOOR ||
-                        blockType == Material.BIRCH_DOOR ||
-                        blockType == Material.DARK_OAK_DOOR ||
-                        blockType == Material.JUNGLE_DOOR ||
-                        blockType == Material.SPRUCE_DOOR ||
-                        blockType == Material.OAK_TRAPDOOR ||
-                        blockType == Material.IRON_TRAPDOOR) {
+                // 门类和活版门类
+                String materialName = blockType.name();
+                if (materialName.endsWith("_DOOR") ||
+                        materialName.endsWith("_FENCE_GATE") ||
+                        materialName.endsWith("_TRAPDOOR")) {
                     event.setCancelled(true);
+                    if (plugin.isDebugMode()) {
+                        plugin.getLogger().info("阻止玩家 " + player.getName() + " 与门或活版门交互: " + blockType.name());
+                    }
                     return;
                 }
 
                 // 红石类交互方块
                 if (blockType == Material.LEVER ||
-                        blockType == Material.STONE_BUTTON ||
-                        blockType == Material.OAK_BUTTON ||
+                        materialName.endsWith("_BUTTON") ||
                         blockType == Material.COMPARATOR ||
                         blockType == Material.REPEATER ||
                         blockType == Material.DAYLIGHT_DETECTOR) {
                     event.setCancelled(true);
+                    if (plugin.isDebugMode()) {
+                        plugin.getLogger().info("阻止玩家 " + player.getName() + " 与红石方块交互: " + blockType.name());
+                    }
                     return;
                 }
 
@@ -146,12 +138,15 @@ public class WorldListener implements Listener {
                         blockType == Material.FURNACE ||
                         blockType == Material.BREWING_STAND ||
                         blockType == Material.ENCHANTING_TABLE ||
-                        blockType == Material.ANVIL ||
+                        materialName.contains("ANVIL") ||
                         blockType == Material.CRAFTING_TABLE ||
                         blockType == Material.HOPPER ||
                         blockType == Material.DROPPER ||
                         blockType == Material.DISPENSER) {
                     event.setCancelled(true);
+                    if (plugin.isDebugMode()) {
+                        plugin.getLogger().info("阻止玩家 " + player.getName() + " 与方块交互: " + blockType.name());
+                    }
                 }
             }
         }
